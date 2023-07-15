@@ -2,15 +2,18 @@ const express = require('express');
 
 const morgan = require('morgan');
 
-const tourRouter = require('./routes/tourRoutes')
-const userRouter = require('./routes/userRoutes')
+const tourRouter = require('./routes/tourRoutes');
+const userRouter = require('./routes/userRoutes');
 
 const app = express();
 
 // middleware
 
 app.use(express.json());
-app.use(morgan('dev'));
+console.log(process.env.NODE_ENv);
+if (process.env.NODE_ENV === ' development') {
+  app.use(morgan('dev'));
+}
 // app.get('/', (req, res) => {
 //   res.status(200).json({ message: 'hello from server side', app: 'Natours' });
 // });
@@ -18,7 +21,7 @@ app.use(morgan('dev'));
 // app.post('/',(req,res)=>{
 // res.send('post to this endpoints....')
 // })
-
+app.use(express.static(`${__dirname}/public`));
 app.use((req, res, next) => {
   console.log('hello from middleware');
   next();
@@ -29,9 +32,7 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
-// all routes handlers 
+// all routes handlers
 // app.get('/api/v1/tours', getAlltours);
 // app.post('/api/v1/tours', createTour);
 // app.get('/api/v1/tours/:id', getTour);
@@ -41,7 +42,7 @@ app.use((req, res, next) => {
 
 // all routes
 
-app.use('/api/v1/tours',tourRouter);
-app.use('/api/v1/users',userRouter)
+app.use('/api/v1/tours', tourRouter);
+app.use('/api/v1/users', userRouter);
 // server starter
-module.exports = app
+module.exports = app;
